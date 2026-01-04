@@ -1,3 +1,6 @@
 runtime: nodejs20
-instance_class: F1
 env: standard
+instance_class: f1
+
+env_variables:
+  NODE_ENV: 'production'

@@ -1,7 +1,7 @@
 {
-  "name": "app-deployment",
+  "name": "ca1-calculator-gcp",
   "version": "1.0.0",
-  "description": "CA1 B8IS124 simple Node.js App Engine",
+  "description": "Simple calculator with history for CA1 B8IS124 deployed to App Engine using Cloud Build",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -11,7 +11,7 @@
     "express-session": "^1.18.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   },
   "license": "MIT"
 }
