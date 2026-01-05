@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>CA1 Calculator</title>
+      <title>Calculator</title>
       <style>
         body { font-family: Arial, sans-serif; display: flex; max-width: 800px; margin: 50px auto; }
         #calc { flex: 1; padding: 20px; border-right: 1px solid #ccc; }
@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
     </head>
     <body>
       <div id="calc">
-        <h1>Calculator – GCP App Engine</h1>
+        <h1>Calculator</h1>
         <form method="POST" action="/">
           <input type="number" name="num1" placeholder="Number 1" step="any" required autofocus><br>
           <select name="op">
@@ -64,10 +64,6 @@ app.get('/', (req, res) => {
         <div id="result">${result}</div>
         <div id="error">${error}</div>
         <div class="info">
-          <p><strong>Services:</strong></p>
-          <p>✓ App Engine (compute)</p>
-          <p>✓ Cloud Storage (logs)</p>
-          <p>✓ Cloud Build (CI/CD)</p>
         </div>
       </div>
       <div id="history">

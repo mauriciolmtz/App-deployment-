@@ -1,5 +1,5 @@
 # App-deployment
-simple web calculator with operation history **cloud storage**, and have been deployed to app engine using cloud build 
+simple web calculator with operation history deployed to app engine using and using cloud cloud storage and the application is automatically deployed from github using cloud build 
 ## 1- create a google cloud proyect
 ## 2- activate APIS 
 - cloud build API
@@ -12,18 +12,30 @@ simple web calculator with operation history **cloud storage**, and have been de
 ## 4- create app.yaml
 - to specify what enviroment is going to be used by the application 
 ```bash
- runtime: nodejs20 
- instance_class: F1
- env: standard 
+runtime: nodejs20
+env: standard
+instance_class: f1
+
+env_variables:
+  NODE_ENV: 'production'
+  BUCKET_NAME: 'ca1-calculator-logs'
+
  ```
 
 ## 5- crete cloudbuild.yaml
 - it describes the builder what it should do
 ```bash
 steps:
- - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', 'app.yaml', '--quiet']
+   # Install dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+
+  # Deploy to App Engine
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', 'app.yaml', '--quiet']
+
 timeout: '900s'
+
 options:
   logging: CLOUD_LOGGING_ONLY
   ```
@@ -36,5 +48,4 @@ options:
 6. select branch (any branch)
 7. configuration (auto detected)
 8. select service account (your service account)
-
 
