@@ -48,4 +48,3 @@ options:
 6. select branch (any branch)
 7. configuration (auto detected)
 8. select service account (your service account)
-
