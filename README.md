@@ -1,4 +1,5 @@
 # App-deployment
+simple web calculator with operation history **cloud storage**, and have been deployed to app engine using cloud build 
 ## 1- create a google cloud proyect
 ## 2- activate APIS 
 - cloud build API

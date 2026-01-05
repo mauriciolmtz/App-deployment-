@@ -1,17 +1,18 @@
 {
   "name": "ca1-calculator-gcp",
   "version": "1.0.0",
-  "description": "Simple calculator with history for CA1 B8IS124 deployed to App Engine using Cloud Build",
+  "description": "Calculator ",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "express-session": "^1.18.0"
+    "express-session": "^1.18.0",
+    "@google-cloud/storage": "^7.0.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20.0.0"
   },
   "license": "MIT"
 }

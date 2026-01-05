@@ -1,7 +1,15 @@
 const express = require('express');
 const session = require('express-session');
+const { Storage } = require('@google-cloud/storage');
 const app = express();
 const port = process.env.PORT || 8080;
+
+// Initialize Google Cloud Storage
+const storage = new Storage({
+  projectId: process.env.GOOGLE_CLOUD_PROJECT
+});
+const bucketName = process.env.BUCKET_NAME || 'ca1-calculator-logs';
+const bucket = storage.bucket(bucketName);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
@@ -36,6 +44,7 @@ app.get('/', (req, res) => {
         #result { font-size: 24px; font-weight: bold; color: green; }
         #error { font-size: 16px; color: red; }
         .op { margin: 5px 0; padding: 5px; background: white; border: 1px solid #ddd; }
+        .info { font-size: 12px; color: #999; margin-top: 20px; }
       </style>
     </head>
     <body>
@@ -54,6 +63,12 @@ app.get('/', (req, res) => {
         </form>
         <div id="result">${result}</div>
         <div id="error">${error}</div>
+        <div class="info">
+          <p><strong>Services:</strong></p>
+          <p>✓ App Engine (compute)</p>
+          <p>✓ Cloud Storage (logs)</p>
+          <p>✓ Cloud Build (CI/CD)</p>
+        </div>
       </div>
       <div id="history">
         <h2>Previous operations</h2>
@@ -66,7 +81,7 @@ app.get('/', (req, res) => {
   `);
 });
 
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
   const { num1, num2, op } = req.body;
   const a = parseFloat(num1);
   const b = parseFloat(num2);
@@ -90,6 +105,38 @@ app.post('/', (req, res) => {
 
   const expr = `${a} ${op} ${b} = ${result}`;
   req.session.history.push(expr);
+
+  // Log operation to Cloud Storage
+  try {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      operation: expr,
+      result: result
+    };
+
+    // Write to a JSON log file in Cloud Storage
+    const file = bucket.file('calculator-logs.json');
+    const [exists] = await file.exists();
+
+    let logs = [];
+    if (exists) {
+      const data = await file.download();
+      logs = JSON.parse(data.toString());
+    }
+
+    logs.push(logEntry);
+
+    // Keep only last 10 operations
+    if (logs.length > 10) {
+      logs = logs.slice(-10);
+    }
+
+    await file.save(JSON.stringify(logs, null, 2));
+    console.log(`Logged operation to Cloud Storage: ${expr}`);
+  } catch (error) {
+    console.error('Error logging to Cloud Storage:', error.message);
+    // Don't block the operation if Cloud Storage fails
+  }
 
   res.redirect(`/?result=${result}`);
 });

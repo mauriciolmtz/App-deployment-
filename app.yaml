@@ -4,3 +4,4 @@ instance_class: f1
 
 env_variables:
   NODE_ENV: 'production'
+  BUCKET_NAME: 'ca1-calculator-logs'
